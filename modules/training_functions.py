@@ -14,7 +14,7 @@ def train(train_loader, model, epoch, optimizer, cross_entropy_function):
   rotulo_list = []
 
   for k, batch in enumerate(train_loader):
-    print('\r--{0}/{1}--'.format(k, len(train_loader)), end='', flush=True)
+    print(f'{k}/{len(train_loader)}')
     dado, rotulo = batch
 
     dado = dado.to(globals.DEVICE)
@@ -42,8 +42,8 @@ def train(train_loader, model, epoch, optimizer, cross_entropy_function):
   acc = accuracy_score(pred_list, rotulo_list)
 
   end = time.time()
-  print('\n#################### Train ####################')
-  print('Epoch %d, Loss: %.4f +/- %.4f, Acc: %.2f, Time: %.2f' % (epoch, epoch_loss.mean(), epoch_loss.std(), acc*100, end-start))
+  print('\nTreino')
+  print(f'Loss: {epoch_loss.mean()} +/- {epoch_loss.std()}, Acc: {acc*100}, Time: {end-start}')
 
   return epoch_loss.mean()
 
@@ -60,7 +60,7 @@ def validate(test_loader, model, epoch, cross_entropy_function):
   with torch.no_grad():
     for k, batch in enumerate(test_loader):
 
-      print('\r--{0}/{1}--'.format(k, len(test_loader)), end='', flush=True)
+      print(f'{k}/{len(test_loader)}')
       dado, rotulo = batch
 
       dado = dado.to(globals.DEVICE)
@@ -82,7 +82,7 @@ def validate(test_loader, model, epoch, cross_entropy_function):
   acc = accuracy_score(pred_list, rotulo_list)
 
   end = time.time()
-  print('\n********** Validate **********')
-  print('Epoch %d, Loss: %.4f +/- %.4f, Acc: %.2f, Time: %.2f\n' % (epoch, epoch_loss.mean(), epoch_loss.std(), acc*100, end-start))
+  print('\nValidate')
+  print(f'Loss: {epoch_loss.mean()} +/- {epoch_loss.std()}, Acc: {acc*100}, Time: {end-start}')
 
   return epoch_loss.mean()
