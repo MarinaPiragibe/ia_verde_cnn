@@ -5,13 +5,11 @@ import torch
 from modules import globals
 
 def train(train_loader, model, epoch, optimizer, cross_entropy_function):
-  # Training mode
   model.train()
 
   start = time.time()
 
   epoch_loss  = []
-  # Mude aqui: pred_list e rotulo_list serão listas de valores, não de arrays
   pred_list = []
   rotulo_list = []
 
@@ -19,9 +17,8 @@ def train(train_loader, model, epoch, optimizer, cross_entropy_function):
     print('\r--{0}/{1}--'.format(k, len(train_loader)), end='', flush=True)
     dado, rotulo = batch
 
-    # Cast do dado na GPU/CPU (use a variável args['device'] do seu contexto)
-    dado = dado.to(globals.DEVICE) # Ajuste: use args.device aqui
-    rotulo = rotulo.to(globals.DEVICE) # Ajuste: use args.device aqui
+    dado = dado.to(globals.DEVICE)
+    rotulo = rotulo.to(globals.DEVICE)
 
     # Forward
     optimizer.zero_grad()
@@ -31,7 +28,6 @@ def train(train_loader, model, epoch, optimizer, cross_entropy_function):
 
     _, pred = torch.max(ypred, axis=1)
 
-    # Mude aqui: use .extend() para adicionar os elementos individualmente
     pred_list.extend(pred.cpu().numpy())
     rotulo_list.extend(rotulo.cpu().numpy())
 
@@ -40,11 +36,8 @@ def train(train_loader, model, epoch, optimizer, cross_entropy_function):
     optimizer.step()
 
   epoch_loss = np.asarray(epoch_loss)
-  # Agora, pred_list e rotulo_list já são listas de valores,
-  # então basta convertê-los para np.array (o .ravel() não é estritamente necessário,
-  # mas não causa problema se a lista já é 1D)
-  pred_list  = np.asarray(pred_list) # Remova o .ravel() ou mantenha, não fará diferença se já for 1D
-  rotulo_list  = np.asarray(rotulo_list) # Remova o .ravel() ou mantenha
+  pred_list  = np.asarray(pred_list)
+  rotulo_list  = np.asarray(rotulo_list)
 
   acc = accuracy_score(pred_list, rotulo_list)
 
@@ -55,15 +48,14 @@ def train(train_loader, model, epoch, optimizer, cross_entropy_function):
   return epoch_loss.mean()
 
 
-def validate(test_loader, model, epoch, cross_entropy_function): # Ajustado para receber model
-  # Evaluation mode
-  model.eval() # Ajustado para model.eval()
+def validate(test_loader, model, epoch, cross_entropy_function): 
+  model.eval() 
 
   start = time.time()
 
   epoch_loss  = []
-  pred_list = [] # Mude aqui
-  rotulo_list = [] # Mude aqui
+  pred_list = [] 
+  rotulo_list = [] 
 
   with torch.no_grad():
     for k, batch in enumerate(test_loader):
@@ -71,22 +63,21 @@ def validate(test_loader, model, epoch, cross_entropy_function): # Ajustado para
       print('\r--{0}/{1}--'.format(k, len(test_loader)), end='', flush=True)
       dado, rotulo = batch
 
-      # Cast do dado na GPU/CPU (use a variável args['device'] do seu contexto)
-      dado = dado.to(globals.DEVICE) # Ajuste: use args.device aqui
-      rotulo = rotulo.to(globals.DEVICE) # Ajuste: use args.device aqui
+      dado = dado.to(globals.DEVICE)
+      rotulo = rotulo.to(globals.DEVICE) 
 
       # Forward
-      ypred = model(dado) # Ajustado para model(dado)
+      ypred = model(dado)
       loss = cross_entropy_function(ypred, rotulo)
       epoch_loss.append(loss.cpu().data)
 
       _, pred = torch.max(ypred, axis=1)
-      pred_list.extend(pred.cpu().numpy()) # Mude aqui
-      rotulo_list.extend(rotulo.cpu().numpy()) # Mude aqui
+      pred_list.extend(pred.cpu().numpy())
+      rotulo_list.extend(rotulo.cpu().numpy())
 
   epoch_loss = np.asarray(epoch_loss)
-  pred_list  = np.asarray(pred_list) # Mude aqui
-  rotulo_list  = np.asarray(rotulo_list) # Mude aqui
+  pred_list  = np.asarray(pred_list)
+  rotulo_list  = np.asarray(rotulo_list)
 
   acc = accuracy_score(pred_list, rotulo_list)
 
