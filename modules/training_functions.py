@@ -3,6 +3,7 @@ import numpy as np
 import time
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 from modules import globals
+from modules import utils
 
 def train(train_loader, model, optimizer, cross_entropy_function):
     model.train()
@@ -35,25 +36,8 @@ def train(train_loader, model, optimizer, cross_entropy_function):
         # Backpropagation
         loss.backward()
         optimizer.step()
+    return
 
-    epoch_loss = np.asarray(epoch_loss)
-
-    final_pred_array = np.asarray(pred_list)
-    final_rotulo_array = np.asarray(rotulo_list)
-
-    accuracy = accuracy_score(final_rotulo_array, final_pred_array)
-    precision = precision_score(final_rotulo_array, final_pred_array, average='binary', zero_division=0)
-    recall = recall_score(final_rotulo_array, final_pred_array, average='binary', zero_division=0)
-    f1 = f1_score(final_rotulo_array, final_pred_array, average='binary', zero_division=0)
-    conf_matrix = confusion_matrix(final_rotulo_array, final_pred_array, labels=[0, 1])
-
-    end = time.time()
-    print('\nTreino')
-    print(f'Loss: {epoch_loss.mean():.4f} +/- {epoch_loss.std():.4f}, Acc: {accuracy*100:.2f}, Time: {end-start:.2f}')
-
-    return accuracy, precision, recall, f1, conf_matrix, epoch_loss.mean()
-
-# acc_train, prec_train, rec_train, f1_train, cm_train, loss_train = train(train_loader, resnet_model, epoch, optimizer, criterion)
 
 def validate(test_loader, model, cross_entropy_function):
     model.eval() 
@@ -94,9 +78,14 @@ def validate(test_loader, model, cross_entropy_function):
     conf_matrix = confusion_matrix(final_rotulo_array, final_pred_array, labels=[0, 1])
 
     end = time.time()
-    print('\nValidação')
-    print(f'Loss: {epoch_loss.mean():.4f} +/- {epoch_loss.std():.4f}, Acc: {accuracy*100:.2f}, Time: {end-start:.2f}\n')
 
-    return accuracy, precision, recall, f1, conf_matrix, epoch_loss.mean()
-
-# acc_val, prec_val, rec_val, f1_val, cm_val, loss_val = validate(test_loader, resnet_model, epoch, criterion)
+    print('\n------- Validação ------- ')
+    print(f'Tempo total: {end-start:.2f}') 
+    print(f'Loss: {epoch_loss.mean():.4f} +/- {epoch_loss.std():.4f}')
+    print(f"Acurácia (Podado): {accuracy:.4f}")
+    print(f"Precisão (Podado): {precision:.4f}")
+    print(f"Recall (Podado): {recall:.4f}")
+    print(f"F1-Score (Podado): {f1:.4f}")
+    print(f"Matriz de Confusão (Podado):\n")
+    utils.plot_confusion_matrix(conf_matrix)
+    return
