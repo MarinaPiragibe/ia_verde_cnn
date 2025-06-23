@@ -36,6 +36,7 @@ def train(train_loader, model, optimizer, cross_entropy_function):
         # Backpropagation
         loss.backward()
         optimizer.step()
+    print()
     return
 
 
@@ -65,6 +66,7 @@ def validate(test_loader, model, cross_entropy_function):
 
             pred_list.extend(pred.cpu().numpy())
             rotulo_list.extend(rotulo.cpu().numpy())
+        print()
 
     epoch_loss = np.asarray(epoch_loss)
 
