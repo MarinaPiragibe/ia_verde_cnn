@@ -80,12 +80,12 @@ def validate(test_loader, model, cross_entropy_function):
     end = time.time()
 
     print('\n------- Validação ------- ')
-    print(f'Tempo total: {end-start:.2f}') 
-    print(f'Loss: {epoch_loss.mean():.4f} +/- {epoch_loss.std():.4f}')
-    print(f"Acurácia: {accuracy:.4f}")
+    print(f'Tempo total: {end-start:.2f} ') 
+    print(f'Loss: {epoch_loss.mean():.4f} +/- {epoch_loss.std():.4f} ')
+    print(f"Acurácia: {accuracy:.4f} ")
     print(f"Precisão: {precision:.4f}")
-    print(f"Recall: {recall:.4f}")
-    print(f"F1-Score: {f1:.4f}")
-    print(f"Matriz de Confusão:\n")
+    print(f"Recall: {recall:.4f} ")
+    print(f"F1-Score: {f1:.4f} ")
+    print(f"Matriz de Confusão:\n ")
     utils.plot_confusion_matrix(conf_matrix)
     return
