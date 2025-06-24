@@ -1,4 +1,4 @@
 # ia_verde_cnn
 
-## Autor:
+## Autora:
 Marina Piragibe

@@ -21,7 +21,7 @@ def plot_sample(train_loader, data_type):
     plt.show()
 
 def plot_confusion_matrix(confusion_matrix):
-    plt.figure(figsize=(8, 6)) # Define o tamanho da figura
+    plt.figure(figsize=(8, 6))
     seaborn.heatmap(confusion_matrix,
                 annot=True,      
                 fmt='d',         
@@ -33,7 +33,7 @@ def plot_confusion_matrix(confusion_matrix):
     plt.title('Matriz de Confusão', fontsize=16)
     plt.xticks(rotation=45, ha='right') 
     plt.yticks(rotation=0)             
-    plt.tight_layout() #
+    plt.tight_layout()
     plt.show() 
 
 def measure_inference_time(model, dummy_input, num_warmup=10, num_runs=100):
@@ -57,22 +57,22 @@ def measure_inference_time(model, dummy_input, num_warmup=10, num_runs=100):
     return mean_time_ms
 
 def measure_model_memory_usage(model):
-    mem_bytes = sum(p.element_size() * p.nelement() for p in model.parameters())
+    mem_bytes = sum(parameter.element_size() * parameter.nelement() for parameter in model.parameters())
     mem_mb = mem_bytes / (1024 * 1024)
     return mem_mb
 
 def load_model_from_file(model_path):
     model = models.resnet18(pretrained=True)
-    num_ftrs = model.fc.in_features
-    model.fc = nn.Linear(num_ftrs, 2)
+    num_in_features = model.fc.in_features
+    model.fc = nn.Linear(num_in_features, 2)
     try:
         model.load_state_dict(torch.load(model_path, map_location='cpu'))
         model.to(globals.DEVICE)
         model.eval()
-        print(f"\nModelo original '{model_path}' carregado para avaliação de desempenho.")
+        print(f"\nModelo '{model_path}' carregado para avaliação de desempenho.")
         return model
     except FileNotFoundError:
-        print(f"ERRO: Modelo original '{model_path}' não encontrado. Não será possível comparar.")
+        print(f"ERRO: Modelo '{model_path}' não encontrado. Não será possível comparar.")
         model = None
         return model
     
