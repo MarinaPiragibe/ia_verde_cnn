@@ -1,7 +1,6 @@
 # ia_verde_cnn
 
-## Autora:
-Marina Piragibe
+## Autora: Marina Piragibe
 
 A estrutura do projeto é:
 
