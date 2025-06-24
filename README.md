@@ -20,5 +20,5 @@ Na pasta modules estão as funções utilizadas para treinamento e análise dos 
 
 A pasta old contém versões antigas dos modelos treinados. Os modelos finais estão salvos na raiz do projeto com nomes no padrão "resnet18_cifake_..."
 
-Toda a lógica de pré-processamento e execução do modelo está detalhada em main.ipynb, assim como análise de métricas e comparações dos modelos criados, além de reflexões e conclusões sobre o projeto.
+Toda a lógica de pré-processamento e execução do modelo está detalhada em main.ipynb incluindo o download do dataset utilizado, assim como análise de métricas e comparações dos modelos criados, além de reflexões e conclusões sobre o projeto.
 
